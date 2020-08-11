@@ -40,10 +40,10 @@ class GUI():
 
                 #Enter random number sudoku "inputter"
                 self.squares[(row, col)].setNumber(0)
-                
                 self.board.create_rectangle(x1, y1, x2, y2, fill="white")
                 
-
+                self.setThickSquareLine()
+                
     def draw(self):
         for row in range(self.squareNr):
             for col in range(self.squareNr):
@@ -61,28 +61,36 @@ class GUI():
                     if(number):
                         self.board.create_text(textX, textY, font=("Purisa", 30), text=number)
 
+        self.setThickSquareLine()
+
     def squareClick(self, event):
         selected_column = int(event.x / self.squareDim)
         selected_row    = int(event.y / self.squareDim)
         try:
             self.board.focus_set()
             self.highlightedSquare = (selected_row, selected_column)
-            print(self.highlightedSquare)
+            print(f"Clicked:  {self.highlightedSquare}")
         except:
             pass
+
         self.draw()
 
     def keyboardInput(self, event):
         try:
-            print(f"{repr(event.char)} Pressed at {self.highlightedSquare}")
+            print(f"Pressed: {repr(event.char)}")
             self.squares[self.highlightedSquare].setNumber(int(event.char))
         except:
             pass
 
         self.draw()
-        
-            
 
+    def setThickSquareLine(self):
+        # Three thick boxes on each row
+        boxSpacing = self.width / 3
+        for col in range(1, 4):
+            self.board.create_line(boxSpacing*col, 0, boxSpacing*col, self.height, width=3)
+        for row in range(1, 4):
+            self.board.create_line(0, boxSpacing*row, self.width, boxSpacing*row, width=3)
 
 def main():
     board = GUI()
