@@ -61,13 +61,14 @@ class GUI():
                 self.setThickSquareLine()
 
         
-        print(self.assignBoardNumbers())
+        self.assignBoardNumbers()
         
     def draw(self):
         self.board.delete("all")
-        print(self.getRowNumbers(0))
-        print(self.getColNumbers(3))
-        #print(self.getSquareNumbers(0))
+
+        self.isValidRow(0)
+        self.isValidCol(1)
+        self.isValidSquare(0)
 
         for row in range(self.squareNr):
             for col in range(self.squareNr):
@@ -86,7 +87,6 @@ class GUI():
                         self.board.create_rectangle(x1, y1, x2, y2, fill="white")
                     if(number):
                         self.board.create_text(textX, textY, font=("Purisa", 30), text=number)
-
 
         self.setThickSquareLine()
 
@@ -136,25 +136,79 @@ class GUI():
 
     def getSquareNumbers(self, square):
         squareNumbers = list()
-        boxNumber = int(self.squareNr / 3)
-        print(boxNumber*square, boxNumber*square + boxNumber)
-        for row in range(boxNumber*square, boxNumber*square + boxNumber):
-            for col in range(boxNumber*square, boxNumber*square + boxNumber):
-                print((row, col))
+        boxSize = int(self.squareNr / 3)
+        rowLevel = 0
+
+        # Consider revising this solution, better solutions exist
+        if(2 < square <= 5):
+            rowLevel = 1
+
+        elif(5 < square <= 8):
+            rowLevel = 2
+                
+        colLevel = square % 3
+        
+        for row in range(boxSize*rowLevel, boxSize*rowLevel + boxSize):
+            for col in range(boxSize*colLevel, boxSize*colLevel + boxSize):
                 squareNumbers.append(self.squares[(row, col)].getNumber())
 
         return squareNumbers
 
-    # Develop auto generated games that will applied to this function later
+    # Consider creating superclasses for the three checks
+    def isValidSquare(self, square):
+        n = set(self.getSquareNumbers(square))
+        try:
+            n.remove(0)
+        except:
+            pass
+        
+        if(len(n) < 9):
+            return False
+        else:
+            print(n)
+            return True
+
+    def isValidRow(self, row):
+        n = set(self.getRowNumbers(row))
+        try:
+            n.remove(0)
+        except:
+            pass
+        
+        if(len(n) < 9):
+            return False
+        else:
+            print(n)
+            return True
+
+    def isValidCol(self, col):
+        n = set(self.getColNumbers(col))
+        try:
+            n.remove(0)
+        except:
+            pass
+        
+        if(len(n) < 9):
+            return False
+        else:
+            print(n)
+            return True
+
     def assignBoardNumbers(self):
+        game = self.createRandomGame()
         for row in range(self.squareNr):
             for col in range(self.squareNr):
-                currVal = testGame[row][col]
+                currVal = game[row][col]
                 if(currVal == 0):
-                    self.squares[(row, col)].setNumber(testGame[row][col])
+                    self.squares[(row, col)].setNumber(game[row][col])
                 else:
-                    self.squares[(row, col)].setHardCodedNumber(testGame[row][col])
+                    self.squares[(row, col)].setHardCodedNumber(game[row][col])
 
+
+
+    # Will create randomized games in the future
+    def createRandomGame(self):
+        return testGame
 
 def main():
     board = GUI()
