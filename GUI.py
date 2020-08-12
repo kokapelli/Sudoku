@@ -3,6 +3,16 @@ from Square import Square
 
 hardcodeTest = ((0, 0), (7, 7), (3, 6), (6, 3))
 
+testGame = [[9,0,0,3,0,5,0,0,0],
+            [0,3,0,0,0,7,0,0,6],
+            [0,7,5,4,1,0,9,3,9],
+            [0,0,0,6,4,2,0,0,0],
+            [1,0,0,0,0,0,0,0,4],
+            [0,0,0,1,3,8,0,0,0],
+            [0,1,9,0,7,3,2,4,0],
+            [3,0,0,2,0,0,0,6,0],
+            [0,0,0,9,0,4,0,0,7]]
+
 class GUI():
     def __init__(self):
         self.width = 540
@@ -37,21 +47,28 @@ class GUI():
 
                 textX = x1 + self.squareDim/2
                 textY = y1 + self.squareDim/2
-
+                
                 # Crude solution, will be refactored.
                 if((row, col) in hardcodeTest):
-                    self.squares[(row, col)] = Square(9, x1, y1, x2, y2, textX, textY, (row, col), True, self)
+                    self.squares[(row, col)] = Square(x1, y1, x2, y2, textX, textY, (row, col), self)
                 
                 else:
-                    self.squares[(row, col)] = Square(0, x1, y1, x2, y2, textX, textY, (row, col), False, self)
+                    self.squares[(row, col)] = Square(x1, y1, x2, y2, textX, textY, (row, col), self)
 
                 #Enter random number sudoku "inputter"
                 self.board.create_rectangle(x1, y1, x2, y2, fill="white")
                 
                 self.setThickSquareLine()
+
+        
+        print(self.assignBoardNumbers())
         
     def draw(self):
         self.board.delete("all")
+        print(self.getRowNumbers(0))
+        print(self.getColNumbers(3))
+        #print(self.getSquareNumbers(0))
+
         for row in range(self.squareNr):
             for col in range(self.squareNr):
                 currSquare = self.squares[(row, col)]
@@ -101,6 +118,43 @@ class GUI():
             self.board.create_line(boxSpacing*col, 0, boxSpacing*col, self.height, width=3)
         for row in range(1, 4):
             self.board.create_line(0, boxSpacing*row, self.width, boxSpacing*row, width=3)
+
+
+    def getRowNumbers(self, row):
+        rowNumbers = list()
+        for i in range(self.squareNr):
+            rowNumbers.append(self.squares[(row, i)].getNumber())
+
+        return rowNumbers
+
+    def getColNumbers(self, col):
+        colNumbers = list()
+        for i in range(self.squareNr):
+            colNumbers.append(self.squares[(i, col)].getNumber())
+
+        return colNumbers
+
+    def getSquareNumbers(self, square):
+        squareNumbers = list()
+        boxNumber = int(self.squareNr / 3)
+        print(boxNumber*square, boxNumber*square + boxNumber)
+        for row in range(boxNumber*square, boxNumber*square + boxNumber):
+            for col in range(boxNumber*square, boxNumber*square + boxNumber):
+                print((row, col))
+                squareNumbers.append(self.squares[(row, col)].getNumber())
+
+        return squareNumbers
+
+    # Develop auto generated games that will applied to this function later
+    def assignBoardNumbers(self):
+        for row in range(self.squareNr):
+            for col in range(self.squareNr):
+                currVal = testGame[row][col]
+                if(currVal == 0):
+                    self.squares[(row, col)].setNumber(testGame[row][col])
+                else:
+                    self.squares[(row, col)].setHardCodedNumber(testGame[row][col])
+
 
 def main():
     board = GUI()

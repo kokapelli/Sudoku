@@ -1,6 +1,6 @@
 
 class Square():
-    def __init__(self, number, x1, y1, x2, y2, textX, textY, coord, hardCoded, board):
+    def __init__(self, x1, y1, x2, y2, textX, textY, coord, board):
         self.x1 = x1
         self.y1 = y1
         self.x2 = x2
@@ -10,8 +10,8 @@ class Square():
         self.coord = coord
 
         self.board = board
-        self.number = number
-        self.hardCoded = hardCoded
+        self.number = 0
+        self.hardCoded = False
 
 
     def __repr__(self):
@@ -31,6 +31,10 @@ class Square():
         
     def getHardcoded(self):
         return self.hardCoded
+
+    def setHardCodedNumber(self, number):
+        self.number = number
+        self.hardCoded = True
 
     def setNumber(self, number):
         if(self.hardCoded):
