@@ -1,6 +1,7 @@
 from tkinter import *
 from Square import Square
 
+hardcodeTest = ((0, 0), (7, 7), (3, 6), (6, 3))
 
 class GUI():
     def __init__(self):
@@ -16,6 +17,7 @@ class GUI():
         self.board.bind("<Button-1>", self.squareClick)
 
         self.highlightedSquare = None
+        self.draw()
 
     def createBoard(self):        
         self.master = Tk()
@@ -36,30 +38,38 @@ class GUI():
                 textX = x1 + self.squareDim/2
                 textY = y1 + self.squareDim/2
 
-                self.squares[(row, col)] = Square(x1, y1, x2, y2, textX, textY, (row, col), self)
+                # Crude solution, will be refactored.
+                if((row, col) in hardcodeTest):
+                    self.squares[(row, col)] = Square(9, x1, y1, x2, y2, textX, textY, (row, col), True, self)
+                
+                else:
+                    self.squares[(row, col)] = Square(0, x1, y1, x2, y2, textX, textY, (row, col), False, self)
 
                 #Enter random number sudoku "inputter"
-                self.squares[(row, col)].setNumber(0)
                 self.board.create_rectangle(x1, y1, x2, y2, fill="white")
                 
                 self.setThickSquareLine()
-                
+        
     def draw(self):
+        self.board.delete("all")
         for row in range(self.squareNr):
             for col in range(self.squareNr):
                 currSquare = self.squares[(row, col)]
                 number = currSquare.getNumber()
                 x1, y1, x2, y2, textX, textY = currSquare.getGUISquareCoords()
                 
-
-                if (self.highlightedSquare is not None and self.highlightedSquare == (row, col)):
+                if (self.highlightedSquare is not None and self.highlightedSquare == (row, col) and not currSquare.getHardcoded()):
                     self.board.create_rectangle(x1, y1, x2, y2, fill="beige")
                     if(number):
                         self.board.create_text(textX, textY, font=("Purisa", 30), text=number)
                 else:
-                    self.board.create_rectangle(x1, y1, x2, y2, fill="white")
+                    if(currSquare.getHardcoded()):
+                        self.board.create_rectangle(x1, y1, x2, y2, fill="#e6e6e6")
+                    else:
+                        self.board.create_rectangle(x1, y1, x2, y2, fill="white")
                     if(number):
                         self.board.create_text(textX, textY, font=("Purisa", 30), text=number)
+
 
         self.setThickSquareLine()
 
