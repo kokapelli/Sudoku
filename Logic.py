@@ -6,6 +6,7 @@ class Logic():
     def __init__(self, squares):
         self.squareNr = 9
         self.board = squares
+        self.won = False
 
     def getRowNumbers(self, row):
         rowNumbers = list()
@@ -90,4 +91,5 @@ class Logic():
             if(not self.isValidSquare(square)):
                 return False
 
+        self.won = True
         return True

@@ -1,10 +1,15 @@
+################################################
+# Contains all GUI elements of the Sudoku game #
+################################################
+
 from tkinter import *
 from Square import Square
 from Logic import Logic
 
 class GUI():
-    def __init__(self, game):
+    def __init__(self, game, solution):
         self.game = game
+        self.solution = solution
 
         self.width = 540
         self.height = 540
@@ -70,10 +75,7 @@ class GUI():
         self.setThickSquareLines()
         
         if(self.logic.isGameWon()):
-            l = Label(self.master, bg="#d0ffba", text="Sudoku Completed!", font=("Helvetica", 30)) 
-            l.place(relx = 0.5, rely = 0.5, anchor = 'center')
-            l.config(width=self.width)
-            return
+            self.winner()
 
     def assignBoardNumbers(self):
         for row in range(self.squareNr):
@@ -83,6 +85,15 @@ class GUI():
                     self.squares[(row, col)].setNumber(self.game[row][col])
                 else:
                     self.squares[(row, col)].setHardCodedNumber(self.game[row][col])
+
+    def winner(self):
+            l = Label(self.master, bg="#d0ffba", text="Sudoku Completed!", font=("Helvetica", 30)) 
+            l.place(relx = 0.5, rely = 0.5, anchor = 'center')
+            l.config(width=self.width)
+
+    def newGame(self):
+        destroy(self.master)
+
 
     def resetBoard(self):
         self.board.delete("all")
@@ -103,9 +114,12 @@ class GUI():
         selected_column = int(event.x / self.squareDim)
         selected_row    = int(event.y / self.squareDim)
         try:
-            self.board.focus_set()
-            self.highlightedSquare = (selected_row, selected_column)
-            #print(f"Clicked:  {self.highlightedSquare}")
+            if(not self.logic.won):
+                self.board.focus_set()
+                self.highlightedSquare = (selected_row, selected_column)
+                #print(f"Clicked:  {self.highlightedSquare}")
+            else:
+                self.master.destroy()
         except:
             pass
 

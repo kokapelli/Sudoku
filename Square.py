@@ -1,3 +1,6 @@
+######################################################
+# Defines the state of every square in a Sudoku game #
+######################################################
 
 class Square():
     def __init__(self, x1, y1, x2, y2, textX, textY, coord, board):
