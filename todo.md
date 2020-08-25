@@ -16,6 +16,7 @@
 8. Extra functionalities
     1. Add a timer functionality for each game
     2. Add a way to terminate the game without having to use CTRL+C
-    3. Refine Sudoku creator to only hafe unique solutions.
+    3. Refine Sudoku creator to only have unique solutions.
     4. Add a screen to determine difficulty/provided numbers
+    5. Color numbers which are breaking Sudoku rules
 9. (Continuous) Refactor code

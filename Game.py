@@ -62,10 +62,13 @@ class Game():
         self.startGame()
 
     def startGame(self):
-        while(True):
+        play = True
+        while(play):
             self.board = self.createBoard()
             self.game = GUI(self.board, self.solution)
             self.game.master.mainloop()
+            if(not self.game.play):
+                play = False
 
     def createBoard(self):
         random.seed(datetime.now())

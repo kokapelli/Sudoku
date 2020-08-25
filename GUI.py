@@ -2,6 +2,7 @@
 # Contains all GUI elements of the Sudoku game #
 ################################################
 
+import sys
 from tkinter import *
 from Square import Square
 from Logic import Logic
@@ -22,10 +23,14 @@ class GUI():
         self.board.pack()
         self.board.bind("<Key>", self.keyboardInput)
         self.board.bind("<Button-1>", self.squareClick)
+        self.board.bind('<Escape>', self.exit)
+        self.board.bind('<Return>', self.solve)
 
         self.logic = Logic(self.squares)
         self.highlightedSquare = None
 
+        # Used to inform Game module whether to continue playing or not
+        self.play = True
         self.draw()
 
     def createBoard(self):        
@@ -86,14 +91,15 @@ class GUI():
                 else:
                     self.squares[(row, col)].setHardCodedNumber(self.game[row][col])
 
+    def solveGame(self):
+        for row in range(self.squareNr):
+            for col in range(self.squareNr):
+                self.squares[(row, col)].setNumber(self.solution[row][col])
+
     def winner(self):
             l = Label(self.master, bg="#d0ffba", text="Sudoku Completed!", font=("Helvetica", 30)) 
             l.place(relx = 0.5, rely = 0.5, anchor = 'center')
             l.config(width=self.width)
-
-    def newGame(self):
-        destroy(self.master)
-
 
     def resetBoard(self):
         self.board.delete("all")
@@ -132,4 +138,16 @@ class GUI():
         except:
             pass
 
+        self.draw()
+
+    def exit(self, event):
+        sys.exit()
+
+    def solve(self, event):
+        try:
+            self.board.focus_set()
+            self.solveGame()
+        except:
+            pass
+    
         self.draw()
