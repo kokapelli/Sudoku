@@ -21,16 +21,12 @@ class GUI():
         self.createBoard()
         self.setSquares()
         self.board.pack()
-        self.board.bind("<Key>", self.keyboardInput)
-        self.board.bind("<Button-1>", self.squareClick)
-        self.board.bind('<Escape>', self.exit)
-        self.board.bind('<Return>', self.solve)
+        self.bindKeys()
 
         self.logic = Logic(self.squares)
         self.highlightedSquare = None
 
         # Used to inform Game module whether to continue playing or not
-        self.play = True
         self.draw()
 
     def createBoard(self):        
@@ -91,15 +87,26 @@ class GUI():
                 else:
                     self.squares[(row, col)].setHardCodedNumber(self.game[row][col])
 
+    def bindKeys(self):
+        self.board.bind("<Key>", self.keyboardInput)
+        self.board.bind("<Button-1>", self.squareClick)
+        self.board.bind('<Escape>', self.exit)
+        self.board.bind('<Return>', self.solve)
+        self.board.bind('<Left>', self.leftKey)
+        self.board.bind('<Right>', self.rightKey)
+        self.board.bind('<Up>', self.upKey)
+        self.board.bind('<Down>', self.downKey)
+
+
     def solveGame(self):
         for row in range(self.squareNr):
             for col in range(self.squareNr):
                 self.squares[(row, col)].setNumber(self.solution[row][col])
 
     def winner(self):
-            l = Label(self.master, bg="#d0ffba", text="Sudoku Completed!", font=("Helvetica", 30)) 
-            l.place(relx = 0.5, rely = 0.5, anchor = 'center')
-            l.config(width=self.width)
+        l = Label(self.master, bg="#d0ffba", text="Sudoku Completed!", font=("Helvetica", 30)) 
+        l.place(relx = 0.5, rely = 0.5, anchor = 'center')
+        l.config(width=self.width)
 
     def resetBoard(self):
         self.board.delete("all")
@@ -151,3 +158,51 @@ class GUI():
             pass
     
         self.draw()
+
+    def leftKey(self, event):
+        try:
+            self.board.focus_set()
+            self.squareMove((0, -1))
+        except:
+            pass
+        
+        self.draw()
+    
+    def rightKey(self, event):    
+        try:
+            self.board.focus_set()
+            self.squareMove((0, 1))
+        except:
+            pass
+
+        self.draw()
+
+    def upKey(self, event):
+        try:
+            self.board.focus_set()
+            self.squareMove((-1, 0))
+        except:
+            pass
+        
+        self.draw()
+
+    def downKey(self, event):    
+        try:
+            self.board.focus_set()
+            self.squareMove((1 ,0))
+        except:
+            pass
+        
+        self.draw()
+
+
+    def insideBoundary(self, loc):
+        if(0 <= loc[0] < 9 and 0 <= loc[1] < 9):
+            return True
+        else:
+            return False
+
+    def squareMove(self, direction):
+        newHighlight = tuple(map(lambda i, j: i + j, self.highlightedSquare, direction))
+        if(self.insideBoundary(newHighlight)):
+            self.highlightedSquare = newHighlight
