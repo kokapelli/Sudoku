@@ -2,10 +2,10 @@
 # Contains all GUI elements of the Sudoku game #
 ################################################
 
-import sys
 from tkinter import *
 from Square import Square
 from Logic import Logic
+from Input import Input
 
 class GUI():
     def __init__(self, game, solution):
@@ -21,9 +21,9 @@ class GUI():
         self.createBoard()
         self.setSquares()
         self.board.pack()
-        self.bindKeys()
 
         self.logic = Logic(self.squares)
+        self.Input = Input(self)
         self.highlightedSquare = None
 
         # Used to inform Game module whether to continue playing or not
@@ -87,17 +87,6 @@ class GUI():
                 else:
                     self.squares[(row, col)].setHardCodedNumber(self.game[row][col])
 
-    def bindKeys(self):
-        self.board.bind("<Key>", self.keyboardInput)
-        self.board.bind("<Button-1>", self.squareClick)
-        self.board.bind('<Escape>', self.exit)
-        self.board.bind('<Return>', self.solve)
-        self.board.bind('<Left>', self.leftKey)
-        self.board.bind('<Right>', self.rightKey)
-        self.board.bind('<Up>', self.upKey)
-        self.board.bind('<Down>', self.downKey)
-
-
     def solveGame(self):
         for row in range(self.squareNr):
             for col in range(self.squareNr):
@@ -118,91 +107,3 @@ class GUI():
             self.board.create_line(boxSpacing*col, 0, boxSpacing*col, self.height, width=3)
         for row in range(1, 4):
             self.board.create_line(0, boxSpacing*row, self.width, boxSpacing*row, width=3)
-
-    ##################################
-    ###    User input functions    ###
-    ##################################
-
-    def squareClick(self, event):
-        selected_column = int(event.x / self.squareDim)
-        selected_row    = int(event.y / self.squareDim)
-        try:
-            if(not self.logic.won):
-                self.board.focus_set()
-                self.highlightedSquare = (selected_row, selected_column)
-                #print(f"Clicked:  {self.highlightedSquare}")
-            else:
-                self.master.destroy()
-        except:
-            pass
-
-        self.draw()
-
-    def keyboardInput(self, event):
-        try:
-            #print(f"Pressed: {repr(event.char)}")
-            self.squares[self.highlightedSquare].setNumber(int(event.char))
-        except:
-            pass
-
-        self.draw()
-
-    def exit(self, event):
-        sys.exit()
-
-    def solve(self, event):
-        try:
-            self.board.focus_set()
-            self.solveGame()
-        except:
-            pass
-    
-        self.draw()
-
-    def leftKey(self, event):
-        try:
-            self.board.focus_set()
-            self.squareMove((0, -1))
-        except:
-            pass
-        
-        self.draw()
-    
-    def rightKey(self, event):    
-        try:
-            self.board.focus_set()
-            self.squareMove((0, 1))
-        except:
-            pass
-
-        self.draw()
-
-    def upKey(self, event):
-        try:
-            self.board.focus_set()
-            self.squareMove((-1, 0))
-        except:
-            pass
-        
-        self.draw()
-
-    def downKey(self, event):    
-        try:
-            self.board.focus_set()
-            self.squareMove((1 ,0))
-        except:
-            pass
-        
-        self.draw()
-
-
-    def insideBoundary(self, loc):
-        if(0 <= loc[0] < 9 and 0 <= loc[1] < 9):
-            return True
-        else:
-            return False
-
-    def squareMove(self, direction):
-        newHighlight = tuple(map(lambda i, j: i + j, self.highlightedSquare, direction))
-        if(self.insideBoundary(newHighlight)):
-            self.highlightedSquare = newHighlight

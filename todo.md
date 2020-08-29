@@ -19,7 +19,7 @@
     3. Refine Sudoku creator to only have unique solutions.
     4. Add a screen to determine difficulty/provided numbers
     5. Color numbers which are breaking Sudoku rules
-    6. Add arrow key functionality
+    6. **(Done)** Add arrow key functionality
 9. Add test cases
 10. Add documentation
 11. (Continuous) Refactor code
