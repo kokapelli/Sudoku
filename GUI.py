@@ -24,7 +24,8 @@ class GUI():
 
         self.logic = Logic(self.squares)
         self.Input = Input(self)
-        self.highlightedSquare = None
+        self.highlightedSquare = (4, 4)
+        self.board.focus_set()
 
         # Used to inform Game module whether to continue playing or not
         self.draw()
@@ -52,6 +53,14 @@ class GUI():
         
         self.assignBoardNumbers()
         
+    def setThickSquareLines(self):
+        # Three thick boxes on each row
+        boxSpacing = self.width / 3
+        for col in range(1, 4):
+            self.board.create_line(boxSpacing*col, 0, boxSpacing*col, self.height, width=3)
+        for row in range(1, 4):
+            self.board.create_line(0, boxSpacing*row, self.width, boxSpacing*row, width=3)
+
     def draw(self):
         self.resetBoard()
 
@@ -99,11 +108,3 @@ class GUI():
 
     def resetBoard(self):
         self.board.delete("all")
-
-    def setThickSquareLines(self):
-        # Three thick boxes on each row
-        boxSpacing = self.width / 3
-        for col in range(1, 4):
-            self.board.create_line(boxSpacing*col, 0, boxSpacing*col, self.height, width=3)
-        for row in range(1, 4):
-            self.board.create_line(0, boxSpacing*row, self.width, boxSpacing*row, width=3)

@@ -22,6 +22,7 @@ class Logic():
 
         return colNumbers
 
+    # Refactor
     def getSquareNumbers(self, square):
         squareNumbers = list()
         boxSize = int(self.squareNr / 3)
@@ -42,6 +43,7 @@ class Logic():
 
         return squareNumbers
 
+    # Refactor
     # Consider creating superclasses for the three checks
     def isValidSquare(self, square):
         n = set(self.getSquareNumbers(square))
@@ -79,7 +81,7 @@ class Logic():
         else:
             return True
 
-
+    # Refactor 
     def isGameWon(self):
         for row in range(self.squareNr):
             if(not self.isValidRow(row)):

@@ -23,3 +23,6 @@
 9. Add test cases
 10. Add documentation
 11. (Continuous) Refactor code
+
+# References
+https://www.sudokuwiki.org/Sudoku_Creation_and_Grading.pdf

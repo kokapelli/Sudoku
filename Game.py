@@ -26,7 +26,7 @@ class Game():
     def __init__(self):
         # The amount of initial numbers in the Sudoku
         # Works as a difficulty gauge
-        self.providedNumbers = 14
+        self.providedNumbers = 30
         self.solution = list()
         self.startGame()
 

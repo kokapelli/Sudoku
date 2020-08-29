@@ -1,3 +1,7 @@
+##############################################################
+# Class of functions regarding user keyboard and mouse input #
+##############################################################
+
 import sys
 
 class Input():
