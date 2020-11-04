@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 ################################################
 # Contains all GUI elements of the Sudoku game #
 ################################################
@@ -8,23 +11,23 @@ from Square import Square
 from Logic import Logic
 
 class GUI():
-    def __init__(self, game, solution):
+    def __init__(self, game: list, solution: list):
         self.game = game
         self.solution = solution
 
-        self.width = 540
-        self.height = 540
-        self.squares = dict()
-        self.squareNr = 9
+        self.width     = 540
+        self.height    = 540
+        self.squares   = dict()
+        self.squareNr  = 9
         self.squareDim = self.width // self.squareNr
 
         self.createBoard()
         self.setSquares()
         self.board.pack()
-        self.board.bind("<Key>", self.keyboardInput)
+        self.board.bind("<Key>",      self.keyboardInput)
         self.board.bind("<Button-1>", self.squareClick)
-        self.board.bind('<Escape>', self.exit)
-        self.board.bind('<Return>', self.solve)
+        self.board.bind("<Escape>",   self.exit)
+        self.board.bind("<Return>",   self.solve)
 
         self.logic = Logic(self.squares)
         self.highlightedSquare = None
@@ -33,14 +36,14 @@ class GUI():
         self.play = True
         self.draw()
 
-    def createBoard(self):        
+    def createBoard(self) -> None:
         self.master = Tk()
         self.master.resizable(False, False)
         self.master.title("Falk: Sudoku")
         self.master.configure(background="black")
         self.board = Canvas(self.master, bg="white", highlightthickness=0, width = self.width, height = self.height)
 
-    def setSquares(self):
+    def setSquares(self) -> None:
         for row in range(self.squareNr):
             for col in range(self.squareNr):
                 x1 = self.squareDim*col
@@ -56,7 +59,7 @@ class GUI():
         
         self.assignBoardNumbers()
         
-    def draw(self):
+    def draw(self) -> None:
         self.resetBoard()
 
         for row in range(self.squareNr):
@@ -82,7 +85,7 @@ class GUI():
         if(self.logic.isGameWon()):
             self.winner()
 
-    def assignBoardNumbers(self):
+    def assignBoardNumbers(self) -> None:
         for row in range(self.squareNr):
             for col in range(self.squareNr):
                 currVal = self.game[row][col]
@@ -91,20 +94,20 @@ class GUI():
                 else:
                     self.squares[(row, col)].setHardCodedNumber(self.game[row][col])
 
-    def solveGame(self):
+    def solveGame(self) -> None:
         for row in range(self.squareNr):
             for col in range(self.squareNr):
                 self.squares[(row, col)].setNumber(self.solution[row][col])
 
-    def winner(self):
+    def winner(self) -> None:
             l = Label(self.master, bg="#d0ffba", text="Sudoku Completed!", font=("Helvetica", 30)) 
             l.place(relx = 0.5, rely = 0.5, anchor = 'center')
             l.config(width=self.width)
 
-    def resetBoard(self):
+    def resetBoard(self) -> None:
         self.board.delete("all")
 
-    def setThickSquareLines(self):
+    def setThickSquareLines(self) -> None:
         # Three thick boxes on each row
         boxSpacing = self.width / 3
         for col in range(1, 4):
@@ -116,7 +119,7 @@ class GUI():
     ###    User input functions    ###
     ##################################
 
-    def squareClick(self, event):
+    def squareClick(self, event) -> None:
         selected_column = int(event.x / self.squareDim)
         selected_row    = int(event.y / self.squareDim)
         try:
@@ -131,7 +134,7 @@ class GUI():
 
         self.draw()
 
-    def keyboardInput(self, event):
+    def keyboardInput(self, event) -> None:
         try:
             #print(f"Pressed: {repr(event.char)}")
             self.squares[self.highlightedSquare].setNumber(int(event.char))
@@ -140,10 +143,10 @@ class GUI():
 
         self.draw()
 
-    def exit(self, event):
+    def exit(self, event) -> None:
         sys.exit()
 
-    def solve(self, event):
+    def solve(self, event) -> None:
         try:
             self.board.focus_set()
             self.solveGame()

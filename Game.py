@@ -7,70 +7,28 @@
 
 import random
 import copy
+from boards import *
+from typing import Tuple
 from datetime import datetime
 from GUI import GUI
 
-# Courtesy of https://dingo.sbs.arizona.edu/~sandiway/sudoku/examples.html
-testGame = [[0,0,0,2,6,0,7,0,1],
-            [6,8,0,0,7,0,0,9,0],
-            [1,9,0,0,0,4,5,0,0],
-            [8,2,0,1,0,0,0,4,0],
-            [0,0,4,6,0,2,9,0,0],
-            [0,5,0,0,0,3,0,2,8],
-            [0,0,9,3,0,0,0,7,4],
-            [0,4,0,0,5,0,0,3,6],
-            [7,0,3,0,1,8,0,0,0]]
-
-testAlmostSolution = [[4,3,5,2,6,9,7,8,1],
-            [6,8,2,5,7,1,4,9,3],
-            [1,9,7,8,3,4,5,6,2],
-            [8,2,6,1,9,5,3,4,7],
-            [3,7,4,6,8,2,9,1,5],
-            [9,5,1,7,4,3,6,2,8],
-            [5,1,9,3,2,6,8,7,4],
-            [2,4,8,9,5,7,1,3,6],
-            [7,6,3,4,1,8,2,5,0]]
-
-testSolution = [[4,3,5,2,6,9,7,8,1],
-            [6,8,2,5,7,1,4,9,3],
-            [1,9,7,8,3,4,5,6,2],
-            [8,2,6,1,9,5,3,4,7],
-            [3,7,4,6,8,2,9,1,5],
-            [9,5,1,7,4,3,6,2,8],
-            [5,1,9,3,2,6,8,7,4],
-            [2,4,8,9,5,7,1,3,6],
-            [7,6,3,4,1,8,2,5,9]]
-
-initBoard = [[0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0],
-            [0,0,0,0,0,0,0,0,0]]
-
-
-# THE RANGE CAN BE CHANGED FROM len(board[0]) TO SOMETHING ELSE
 class Game():
     def __init__(self):
         # The amount of initial numbers in the Sudoku
         # Works as a difficulty gauge
         self.providedNumbers = 8
-        self.solution = list()
+        self.solution = []
         self.startGame()
 
-    def startGame(self):
+    def startGame(self) -> None:
         play = True
         while(play):
             self.board = self.createBoard()
             self.game = GUI(self.board, self.solution)
             self.game.master.mainloop()
-            if(not self.game.play):
-                play = False
+            if not self.game.play: play = False
 
-    def createBoard(self):
+    def createBoard(self) -> list:
         random.seed(datetime.now())
 
         # bypassing Python's value by reference
@@ -86,7 +44,7 @@ class Game():
         else:
             return self.createBoard()
     
-    def setRandomNumbers(self, board):
+    def setRandomNumbers(self, board: list) -> list:
             randRow = random.randint(0, 8)
             randCol = random.randint(0, 8)
             randNum = random.randint(1, 9)
@@ -98,7 +56,7 @@ class Game():
                 board[randRow][randCol] = 0
                 return self.setRandomNumbers(board)
             
-    def checkValidPlacement(self, board, row, col):
+    def checkValidPlacement(self, board: list, row: int, col: int) -> bool:
         rowValid = self.checkDuplicate(board[row])
         colValid = self.checkDuplicate(self.getColVals(board, col))
         squareValid = self.checkDuplicate(self.getSquareVals(board, row, col))
@@ -107,7 +65,7 @@ class Game():
         else:
             return False
 
-    def checkDuplicate(self, vals):
+    def checkDuplicate(self, vals: list) -> bool:
         seen = set()
         for num in vals:
             if num not in seen:
@@ -117,7 +75,7 @@ class Game():
 
         return True
 
-    def getColVals(self, board, col):
+    def getColVals(self, board: list, col: int) -> list:
         colVals = list()
         for i in range(len(board[0])):
             colVals.append(board[i][col])
@@ -125,7 +83,7 @@ class Game():
         return colVals
 
     # Dirty solution, will have to be refactored
-    def getSquareVals(self, board, row, col):
+    def getSquareVals(self, board: list, row: int, col: int) -> list:
         squareVals = list()
         boxSize = int(len(board[0]) / 3)
 
@@ -150,8 +108,9 @@ class Game():
 
         return squareVals
 
-    def solveBoard(self, board):
+    def solveBoard(self, board: list) -> bool:
         find = self.findEmpty(board)
+
         if not find:
             return True
         else:
@@ -169,7 +128,7 @@ class Game():
         return False
 
 
-    def validSolution(self, board, num, pos):
+    def validSolution(self, board: list, num: int, pos: int) -> bool:
         for i in range(len(board[0])):
             if board[pos[0]][i] == num and pos[1] != i:
                 return False
@@ -188,7 +147,7 @@ class Game():
 
         return True
 
-    def findEmpty(self, board):
+    def findEmpty(self, board: list) -> Tuple[int, int]:
         for i in range(len(board)):
             for j in range(len(board[0])):
                 if board[i][j] == 0:
