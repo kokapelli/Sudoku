@@ -45,6 +45,7 @@ class Logic():
 
         return squareNumbers
 
+    # Refactor
     # Consider creating superclasses for the three checks
     def isValidSquare(self, square: int) -> bool:
         n = set(self.getSquareNumbers(square))

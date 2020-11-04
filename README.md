@@ -14,4 +14,4 @@ _Pre-req: Enter your "difficulty" in Game.py by setting the number of pre provid
 
 ## Issues
 1. As mentioned above the game is highly minimalistic. Therefore the game can solely accept square values and determine whether you have provided a reasonable solution or not.
-2. Auto generated games can create games with several correct solutions, therefore it lacks the bauty and quality of a sudoku with a unique answer.
+2. Auto generated games can create games with several correct solutions, therefore it lacks the beauty and quality of a sudoku with a unique answer.

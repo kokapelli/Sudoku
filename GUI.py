@@ -5,10 +5,10 @@
 # Contains all GUI elements of the Sudoku game #
 ################################################
 
-import sys
 from tkinter import *
 from Square import Square
 from Logic import Logic
+from Input import Input
 
 class GUI():
     def __init__(self, game: list, solution: list):
@@ -30,10 +30,11 @@ class GUI():
         self.board.bind("<Return>",   self.solve)
 
         self.logic = Logic(self.squares)
-        self.highlightedSquare = None
+        self.Input = Input(self)
+        self.highlightedSquare = (4, 4)
+        self.board.focus_set()
 
         # Used to inform Game module whether to continue playing or not
-        self.play = True
         self.draw()
 
     def createBoard(self) -> None:
